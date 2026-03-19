@@ -1,22 +1,28 @@
 name: Build Windows Exe
 on: [push]
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.11'
+
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install Pillow pyinstaller
+
       - name: Build with PyInstaller
         run: |
           pyinstaller --onefile --windowed --name "WatermarkPhotos" watermark_main.py
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
+
+      - name: Upload Executable
+        uses: actions/upload-artifact@v4
         with:
           name: Windows-Executable
           path: dist/WatermarkPhotos.exe
